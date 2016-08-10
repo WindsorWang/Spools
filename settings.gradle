@@ -1,0 +1,13 @@
+rootProject.name = 'spools'
+
+include 'spools-core'
+include 'spools-javacore'
+include 'spools-javadp'
+include 'spools-algorithm'
+include 'spools-spring'
+include 'spools-web'
+
+
+rootProject.children.each {project ->
+    project.buildFileName = "${project.name}.gradle"
+}

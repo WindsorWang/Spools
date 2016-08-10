@@ -1,0 +1,23 @@
+apply plugin: 'java'
+
+configurations {
+    xmlbeans
+}
+
+task compileXmlSchemas {
+    dependsOn configurations.xmlbeans.getTaskDependencyFromProjectDependency(true, "compileJava")
+    doLast{
+        ant.taskdef(
+            name:'xmlbean', 
+            classname: 'org.apache.xmlbeans.impl.tool.XMLBean', 
+            classpath: configurations.xmlbeans.asPath
+        )
+            
+        ant.xmlbean(
+            schema: 'src/main/schemas', 
+            classgendir: "${buildDir}/classes/xmlbeans",
+            //destfile: "build/libs/sharedata.jar", 
+            classpath: configurations.xmlbeans.asPath
+        )
+    }
+}

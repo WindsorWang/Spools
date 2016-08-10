@@ -1,0 +1,10 @@
+.gradle
+.build
+.idea
+classes
+*.iml
+*.class
+*.bak
+*.jar
+*.war
+

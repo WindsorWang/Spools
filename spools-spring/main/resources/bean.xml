@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	
+	<bean id="theAction"
+			class="com.netpet.spools.spring.springcase.LowerAction" singleton="false">
+			<property name="message">
+				<value>Hello </value>
+			</property>
+	</bean>
+	
+	<bean id="secondAction"
+			class="com.netpet.spools.spring.springcase.UpperAction" singleton="false">
+			<property name="message">
+				<value>Hello </value>
+			</property>
+	</bean>
+	
+	<!-- Proxy Instance with Certain Interface -->
+	<bean id="com.study.proxy.Subject"
+			class="com.study.proxy.RealSubject" singleton="false">
+	</bean>
+	
+</beans>

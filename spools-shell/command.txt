@@ -1,0 +1,14 @@
+一. 脚本文件,编辑好后放在/etc/rc.d/init.d/下面
+
+/etc/rc.d/init.d/redis
+
+二. 后续服务
+
+1.给脚本权限：chmod 755 redis
+
+2.添加到服务：chkconfig --add redis
+
+3.开机启动项：chkconfig --level 345 redis on
+
+
+

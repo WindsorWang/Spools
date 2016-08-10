@@ -1,0 +1,49 @@
+##错误描述：
+Check GitLab API access: FAILED. code: 403
+gitlab-shell self-check failed
+  Try fixing it:
+  Make sure GitLab is running;
+  Check the gitlab-shell configuration file:
+  sudo -u git -H editor /home/git/gitlab-shell/config.yml
+  Please fix the error above and rerun the checks.
+
+执行：
+setenforce 0
+
+vi /etc/selinux/config
+
+GitLab 安装上后git clone时出现403 404错误的解决方法
+2014-09-26 22:50 1489人阅读 评论(0) 收藏 举报
+1. 403
+
+http://stackoverflow.com/questions/21635299/try-install-gitlab-6-5-stable-but-have-a-403-forbiden
+warning:
+ Insecure world writable dir /home/git/gitlab/vendor/bundle/ruby/1.9.1/bin in PATH, mode 042777
+
+It seems you have some issues with the permissions being too open. Fix that by going to /home/git/gitlab/ and run:
+
+find
+ . -type f -print0 | xargs -0 chmod 644 (all files 644 recursively)
+find
+ . -type d -print0 | xargs -0 chmod 755 (all directories 755 recursively)
+sudo
+ -u git -H chmod o-rwx config/database.yml (extra security for the database)
+If that is not the case then maybe its SELinux. You can check that quickly by disabling it temporarily:
+
+setenforce 0
+If the 403 error goes away then enable it back (setenforce
+ 1) and see here at the SELinux section how to make it work.
+
+
+
+2.404
+
+http://stackoverflow.com/questions/21327907/check-gitlab-api-access-failed-code-404
+
+A simple search - https://github.com/gitlabhq/gitlab-shell/issues/37 reveals that URL set in config.yml for gitlab-shell is incorrect and causes 404 error.
+Make sure the config.yml for gitlab-shell is pointing at the correct url or a url that your web server is configured to listen for (eg, probably not localhost).
+
+
+404错误是由于"/usr/bin/git"程序没找到，所能用命令：ln /usr/local/bin/git /usr/bin/git，问题得到解决。
+
+

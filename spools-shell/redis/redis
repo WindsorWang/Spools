@@ -1,0 +1,46 @@
+#!/bin/sh
+#chkconfig: 2345 80 90 
+# Simple Redis init.d script conceived to work on Linux systems
+# as it does use of the /proc filesystem.
+
+REDISPORT=6379
+EXEC=/usr/local/redis-3.0.0/bin/redis-server
+CLIEXEC=/usr/local/redis-3.0.0/bin/redis-cli
+
+PIDFILE=/var/run/redis.pid
+CONF="/etc/redis/${REDISPORT}.conf"
+
+case "$1" in
+    start)
+        if [ -f $PIDFILE ]
+        then
+                echo "$PIDFILE exists, process is already running or crashed"
+        else
+                echo "Starting Redis server..." | awk '{print "\033[36;1m"$0"\033[0m"}'
+                $EXEC $CONF &
+        fi
+        ;;
+    stop)
+        if [ ! -f $PIDFILE ]
+        then
+                echo "$PIDFILE does not exist, process is not running" | awk '{print "\033[41;37;1m"$0"\033[0m"}'
+        else
+                PID=$(cat $PIDFILE)
+                echo "Stopping ..."
+                $CLIEXEC -p $REDISPORT shutdown
+                while [ -x /proc/${PID} ]
+                do
+                    echo "Waiting for Redis to shutdown ..."
+                    sleep 1
+                done
+                echo "Redis stopped"
+        fi
+        ;;
+    status)
+        echo "Showing Redis server status ..." | awk '{print "\033[36;1m"$0"\033[0m"}'
+        echo | ps -ef | grep redis | grep local | grep 3.0.0
+        ;;
+    *)
+        echo "Please use start or stop as first argument"
+        ;;
+esac

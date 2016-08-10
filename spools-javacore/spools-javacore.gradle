@@ -1,0 +1,84 @@
+apply from: '../gradle/xmlbeans.gradle'
+
+configurations {
+    xmlbeans
+    compile {
+        extendsFrom xmlbeans
+    }
+}
+
+dependencies {
+    compile(libs.spring_beans)
+    compile(libs.spring_oxm)
+    compile(libs.spring_context)
+    compile(libs.spring_context_support)
+    compile(libs.spring_web)
+    compile(libs.spring_tx)
+    compile(libs.spring_jdbc)
+    compile(libs.log4j)
+    compile(libs.mail)
+    compile(libs.validation_api)
+    compile(libs.mybatis)
+    compile(libs.mybatis_spring)
+    compile(libs.hibernate_validator)
+    compile(libs.commons_dbcp) {
+        exclude group: 'commons-pool', module: 'commons-pool'
+    }
+    compile(libs.dom4j)
+    compile(libs.slf4j_api)
+    compile(libs.axis2_kernel) {
+        exclude group: 'javax.servlet', module: 'servlet-api'
+    }
+    compile(libs.axis2_adb) {
+        exclude group: 'javax.servlet', module: 'servlet-api'
+    }
+    compile(libs.servlet)
+    compile(libs.axis)
+    compile(libs.commons_codec)
+    compile(libs.commons_io)
+    compile(libs.commons_pool)
+    compile(libs.json_lib)
+    compile(libs.itextpdf)
+    compile(libs.secuInterv4)
+    compile(libs.poi)
+    compile(libs.poi_ooxml)
+    compile(libs.jxl)
+    compile(libs.xmemcached)
+    compile(libs.bouncycastle)
+    compile(libs.postgresql_driver)
+    compile(libs.logback)
+    compile(libs.jackson_databind)
+    compile(libs.commons_net)
+    compile(libs.jsch)
+    compile(libs.jedis) {
+        exclude group: 'commons-pool', module: 'commons-pool'
+    }
+    compile(libs.spymemcached)
+    compile(libs.velocity)
+    compile(libs.dubbo)
+    compile(libs.zkclient) {
+        exclude group: 'org.apache.zookeeper', module: 'zookeeper'
+    }
+    compile(libs.freemarker)
+    compile(libs.javassist)
+    compile(libs.netty)
+    compile(libs.aliyun_oss)
+    compile(libs.aliyun_core)
+    compile(libs.aliyun_sts)
+    compile(libs.aliyun_ram)
+
+    compile(libs.junit)
+    compile(libs.xerces)
+}
+
+task mybastisConfigFiles(type: Copy) {
+    from('src/main/java') {
+        include '**/*.xml'
+    }
+    into "${buildDir}/classes/main"
+}
+
+jar {
+    dependsOn mybastisConfigFiles
+}
+

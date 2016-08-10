@@ -1,0 +1,29 @@
+##注意命令路径
+[root@he05 gitlab]# sudo -u git -H bundle exec rake gitlab:env:info RAILS_ENV=production
+
+System information
+System:		CentOS 6.7
+Current User:	git
+Using RVM:	no
+Ruby Version:	2.2.1p85
+Gem Version:	2.4.5
+Bundler Version:1.10.6
+Rake Version:	10.4.2
+Sidekiq Version:3.3.0
+
+GitLab information
+Version:	8.0.4
+Revision:	e13333a
+Directory:	/home/git/gitlab
+DB Adapter:	postgresql
+URL:		https://git.h2finance.com
+HTTP Clone URL:	https://git.h2finance.com/some-group/some-project.git
+SSH Clone URL:	git@git.h2finance.com:some-group/some-project.git
+Using LDAP:	no
+Using Omniauth:	no
+
+GitLab Shell
+Version:	2.6.5
+Repositories:	/home/git/repositories/
+Hooks:		/home/git/gitlab-shell/hooks/
+Git:		/usr/bin/git

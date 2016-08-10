@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# chkconfig: 35 86 20
+
+# description: Nginx Server
+
+# write by woncz
+
+case "$1" in
+    start)
+        echo "Staring nginx service..." | awk '{print "\033[36;1m"$0"\033[0m"}'
+        /usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
+        ;;
+
+    stop)
+        echo "Stopping nginx service..." | awk '{print "\033[41;37;1m"$0"\033[0m"}'
+        /usr/local/nginx/sbin/nginx -s stop
+        ;;
+
+    status)
+        echo "Showing nginx service..." | awk '{print "\033[36;1m"$0"\033[0m"}'
+        echo | ps -ef|grep nginx
+        ;;
+
+    restart)
+        echo "Restarting nginx service..." | awk '{print "\033[36;1m"$0"\033[0m"}'
+        /usr/local/nginx/sbin/nginx -s reload
+        echo | ps -ef|grep nginx
+        ;;
+
+    *)
+        echo "Usage: $0 {start|stop|restart|status}"
+
+esac
+
+exit 0
+

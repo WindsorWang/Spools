@@ -1,0 +1,227 @@
+apply from: 'gradle/libraries.gradle'
+
+buildscript {
+    project.ext.companyMavenUrls = []
+    project.ext.thirdpartyMavenUrls = []
+
+    project.properties.each {
+        if(it.key.startsWith('company_maven_url')) {
+            project.ext.companyMavenUrls << (nexus_server_url + it.value)
+        } else if(it.key.startsWith('thirdparty_maven_url')) {
+            project.ext.thirdpartyMavenUrls << it.value
+        }
+    }
+
+    repositories {
+        mavenLocal()
+        project.ext.companyMavenUrls.each { addr ->
+            maven { 
+                url addr 
+                credentials {
+                    username nexusUsername
+                    password nexusPassword
+                }
+            }
+        }
+        mavenCentral()
+        project.ext.thirdpartyMavenUrls.each { addr ->
+            maven { url addr }
+        }
+        jcenter()
+    }
+    
+    dependencies {
+        classpath 'com.github.jacobono:gradle-jaxb-plugin:1.3.6'
+        //classpath 'com.github.rholder:gradle-one-jar:1.0.4'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.1'
+    }
+}
+
+ext {
+    expectedGradleVersion = gradle_wrapper_version
+    javaLanguageLevel = System.properties['java.specification.version']
+    envPropsDir = "${rootProject.projectDir}/env"
+    isExcludeResouces4SubProjects = project.hasProperty('isExcludeResouces') ? Boolean.parseBoolean(isExcludeResouces) : true
+}
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'maven'
+
+    version = project_version
+    group = project_group_id
+    
+    eclipse {
+        classpath {
+           downloadSources = true
+        }
+    }
+    
+    repositories {
+        mavenLocal()
+        rootProject.ext.companyMavenUrls.each { addr ->
+            maven { 
+                url addr 
+                credentials {
+                    username nexusUsername
+                    password nexusPassword
+                }
+            }
+        }
+        mavenCentral()
+        rootProject.ext.thirdpartyMavenUrls.each { addr ->
+            maven { url addr }
+        }
+        jcenter()
+    }
+}
+
+// 获取web工程
+def webProjects = web_projects.tokenize(',').collect { project(it) }
+
+// 获取非web工程
+def nonWebProjects = subprojects - webProjects
+
+subprojects {
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+        targetCompatibility = rootProject.javaLanguageLevel
+        sourceCompatibility = rootProject.javaLanguageLevel
+        options.compilerArgs << '-XDignore.symbol.file -Xlint:none'
+        options.fork = true
+        options.forkOptions.executable = 'javac'
+    }
+    
+    configurations {
+        provided
+    }
+
+    sourceSets {
+        main.compileClasspath += configurations.provided
+        test.compileClasspath += configurations.provided
+    }
+
+    eclipse.classpath.plusConfigurations += [configurations.provided]
+}
+
+// 处理非web工程
+configure(nonWebProjects) {
+
+    // 在打包子工程时不打包位于src/main/resources目录下的资源文件
+    if(isExcludeResouces4SubProjects) {
+        jar {
+            sourceSets.main.resources.srcDirs.each { resourceDir ->
+                if(resourceDir.exists()) {
+                    resourceDir.listFiles().each { resourceFile ->
+                        exclude (resourceFile.isFile() ? resourceFile.name : (resourceFile.name + File.separator + '**'))    
+                    }
+                }
+            }
+        }
+    }
+    
+    // 打包子工程的源代码
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+    
+    artifacts {
+        archives sourcesJar
+    }
+    
+    dependencies {
+        testCompile libs.junit
+    }
+}
+
+// 确定要运行的环境
+task getEnv {
+    // 默认为开发环境
+    ext.envConfigFileName = "development"
+    if (project.hasProperty('env')) {
+        String env = project.getProperty('env');
+        switch(env) {
+            case ['t', 'test']:
+                ext.envConfigFileName = "test"
+                break
+            case 'pre':
+                ext.envConfigFileName = "preview"
+                break
+            case ['p', 'prod']:
+                ext.envConfigFileName = "production"
+                break
+        }
+    }
+}
+
+// 获取环境对应的配置
+task initEnvConfig(dependsOn: getEnv) {
+    def props = new Properties()
+    new File("${envPropsDir}/${getEnv.envConfigFileName}.properties").withInputStream { stream ->
+        props.load(stream)
+    }
+    ext.envConfig = new ConfigSlurper().parse(props)
+}
+
+// 处理web工程
+configure(webProjects) {
+    apply plugin: 'war'
+
+    war {
+        destinationDir rootProject.projectDir
+        //archiveName "${project.name}-${project.version}-${getEnv.envConfigFileName}-${getCurrentTimestampStr()}.war"
+    }
+
+    // 过滤资源文件，并将其输出到当前工程的build/resources/main目录下
+    processResources {
+        dependsOn rootProject.initEnvConfig
+        
+        doFirst {
+            def projectsDepended = project.configurations.compile.getAllDependencies().withType(ProjectDependency).collect { it.dependencyProject }
+            from((projectsDepended << project)*.sourceSets.main.resources.srcDirs) {
+                filesMatching('**/*.properties') {
+                    // 使用"@占位符@"
+                    filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: rootProject.initEnvConfig.envConfig)
+                }
+            }
+            into "${buildDir}/resources/main"
+        }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = expectedGradleVersion
+}
+
+String getCurrentTimestampStr() {
+    new Date().format('yyyyMMdd_HHmmss')
+}
+
+// 初始化开发环境的配置
+task generateConfigForDev << {
+    def suffix = '_bak'
+    allprojects*.sourceSets.main.resources.srcDirs.each { srcDir ->
+        // 备份原配置文件
+        copy {
+            includeEmptyDirs = false
+            from(srcDir[0]) {
+                include '**/*.properties'
+                rename { it + suffix }
+            }
+              into srcDir[0]
+          }
+          
+          // 替换配置文件中的占位符
+        copy {
+            includeEmptyDirs = false
+            from(srcDir[0]) {
+                include '**/*.properties' + suffix
+                filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: rootProject.initEnvConfig.envConfig)
+                rename { it.substring(0, it.lastIndexOf(suffix)) }
+            }
+              into srcDir[0]
+          }
+      }
+}
