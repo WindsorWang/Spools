@@ -97,7 +97,7 @@ public class DaoCreatorUtil {
         result.append(this.getTab(1));
         result.append("<resultMap id=\"result" + entity + "\" type=\"" +  entity + "\">\n");
 
-        // µÚÒ»ĞĞ
+        // ç¬¬ä¸€è¡Œ
         result.append(this.getTab(2));
         result.append("<id     property=\"" + properties[0] + "\"" + this.appendSpace(properties[0]));
         result.append("column=\"" + columns[0] + "\"" + this.appendSpace(columns[0]) + "/>");
@@ -117,14 +117,19 @@ public class DaoCreatorUtil {
         sb.append(this.getTab(1));
         sb.append("<sql id=\"column\">\n");
         sb.append(this.getTab(2));
+
+        int count = 1;
+
         for (int i = 1; i < columns.length; i++) {
             sb.append(columns[i]).append(", ");
-            if (sb.toString().length() >= 100) {
+            if (sb.toString().length() >= 120 * count) {
                 sb.append("\n");
+                sb.append(this.getTab(2));
+                count++;
             }
         }
 
-        // Ìæ»»×îºó¶ººÅ
+        // æ›¿æ¢æœ€åé€—å·
         if (sb.toString().endsWith(", ")) {
             sb.replace(sb.length() - 2, sb.length(), " ");
         }
@@ -148,6 +153,10 @@ public class DaoCreatorUtil {
 
         sb.append(this.getTab(2));
         sb.append("from " + table.replace(" ", "").trim());
+        sb.append("\n");
+
+        sb.append(this.getTab(2));
+        sb.append("where " + columns[0] + " = #{id}");
         sb.append("\n");
 
         sb.append(this.getTab(2));
@@ -227,7 +236,7 @@ public class DaoCreatorUtil {
         StringBuffer sb = new StringBuffer("\n");
 
         sb.append(this.getTab(1));
-        sb.append("<delete id=\"delete\" parameter=\"" + idType + "\">\n");
+        sb.append("<delete id=\"delete\" parameterType=\"" + idType + "\">\n");
         sb.append(this.getTab(2));
         sb.append("delete from " + table + "\n");
         sb.append(this.getTab(2));
@@ -242,7 +251,7 @@ public class DaoCreatorUtil {
         StringBuffer sb = new StringBuffer("\n");
 
         sb.append(this.getTab(1));
-        sb.append("<select id=\"queryCount\" resultType=\"java.lang.Integer\" parameterType=\"" + this.getCriteria() +"\"\n");
+        sb.append("<select id=\"queryCount\" resultType=\"java.lang.Integer\" parameterType=\"" + this.getCriteria() +"\">\n");
 
         sb.append(this.getTab(2));
         sb.append("select count(" + columns[0] + ")\n");
