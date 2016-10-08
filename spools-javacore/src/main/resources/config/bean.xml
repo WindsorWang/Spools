@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	
+	<!-- Proxy Instance with Certain Interface -->
+	<bean id="com.study.proxy.Subject"
+			class="com.netpet.spools.javacore.study.proxy.RealSubject" singleton="false">
+	</bean>
+	
+</beans>

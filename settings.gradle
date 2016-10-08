@@ -6,6 +6,7 @@ include 'spools-javadp'
 include 'spools-algorithm'
 include 'spools-spring'
 include 'spools-web'
+include 'spools-architecture'
 
 
 rootProject.children.each {project ->
