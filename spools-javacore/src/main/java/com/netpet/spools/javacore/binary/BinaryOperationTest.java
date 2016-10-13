@@ -12,28 +12,17 @@
  *
  */
 
-package com.netpet.spools.javacore.statickw;
+package com.netpet.spools.javacore.binary;
 
 /**
- * Created by woncz on 2016/8/10.
+ * Created by woncz on 2016/10/13.
  */
-public class StaticNestedInnerClass {
+public class BinaryOperationTest {
 
-    /**
-     * 内部类(inner class)
-     */
-    class Inner {
+    public static void main(String[] args) {
+        int a = 1 << 30;
+        int b = Integer.MAX_VALUE;
 
-        private String name;
-
-    }
-
-    /**
-     * 静态嵌套类(static nested class)
-     */
-    static class StaticNested {
-
-        private String name;
-
+        System.out.println("a = " + a + ", b = " + b + ", b-a = " + (b - a));
     }
 }
