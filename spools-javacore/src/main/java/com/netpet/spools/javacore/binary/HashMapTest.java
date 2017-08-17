@@ -27,7 +27,9 @@ public class HashMapTest {
     public static final int hash(Object k) {
         int h = 0;
         if (0 != h && k instanceof String) {
-            return sun.misc.Hashing.stringHash32((String) k);
+            // Jdk 1.7
+            // return sun.misc.Hashing.stringHash32((String) k);
+            return k.hashCode();
         }
 
         h ^= k.hashCode();

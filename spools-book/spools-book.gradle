@@ -67,6 +67,9 @@ dependencies {
     compile(libs.aliyun_sts)
     compile(libs.aliyun_ram)
 
+    compile(libs.junit)
+    compile(libs.xerces)
+
     compile(libs.akka)
 }
 
@@ -80,4 +83,5 @@ task mybastisConfigFiles(type: Copy) {
 jar {
     dependsOn mybastisConfigFiles
 }
+
 

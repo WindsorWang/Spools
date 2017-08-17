@@ -59,7 +59,8 @@ ext {
         aliyun_sts: "2.1.6",
         aliyun_ram: "2.0.7",
         freemarker: "2.3.20",
-        xerces: "2.9.1"
+        xerces: "2.9.1",
+        akka: "2.3.7"
     ]
     libs = [
         // Hibernate
@@ -216,6 +217,8 @@ ext {
         aliyun_sts: "com.aliyun:aliyun-java-sdk-sts:$versions.aliyun_sts",
         aliyun_ram: "com.aliyun:aliyun-java-sdk-ram:$versions.aliyun_ram",
         freemarker: "org.freemarker:freemarker:$versions.freemarker",
-        xerces: "xerces:xercesImpl:$versions.xerces"
+        xerces: "xerces:xercesImpl:$versions.xerces",
+
+        akka: "com.typesafe.akka:akka-actor_2.11:$versions.akka"
     ]
 }

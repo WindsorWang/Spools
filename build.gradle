@@ -51,6 +51,8 @@ allprojects {
 
     version = project_version
     group = project_group_id
+
+    sourceCompatibility = 1.8
     
     eclipse {
         classpath {

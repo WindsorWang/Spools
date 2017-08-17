@@ -31,6 +31,7 @@
 @echo 正在打包，请稍等……
 @echo.
 @set GRADLE_OPTS=-Xmx512m -XX:MaxPermSize=128m
+@set JAVA_HOME=C:\Programs\Java\jdk1.8.0_131
 @call gradle  -x test --stacktrace --refresh-dependencies -Penv=%env% clean build 
 
 @echo.
