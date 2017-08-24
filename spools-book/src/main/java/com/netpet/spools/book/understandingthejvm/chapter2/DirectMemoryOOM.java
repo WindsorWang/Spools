@@ -16,7 +16,9 @@ public class DirectMemoryOOM {
         Field unsafeField = Unsafe.class.getDeclaredFields()[0];
         unsafeField.setAccessible(true);
         Unsafe unsafe = (Unsafe) unsafeField.get(null);
+        int i = 0;
         while (true) {
+            System.out.println(i++);
             unsafe.allocateMemory(_1MB);
         }
     }

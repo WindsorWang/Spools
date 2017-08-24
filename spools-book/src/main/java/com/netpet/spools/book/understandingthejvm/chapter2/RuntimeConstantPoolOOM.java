@@ -20,9 +20,11 @@ public class RuntimeConstantPoolOOM {
         System.out.println(str1.intern() == str1);
 
         String str11 = new StringBuilder("计算机").append("软件").toString();
-        System.out.println(str1.intern() == str11);
+        System.out.println(str11.intern() == str11);
         System.out.println(str1 == str11);
+        System.out.println(str1 == str11.intern());
         System.out.println(str1.intern() == str1);
+        System.out.println(str1.intern() == str11.intern());
 
         String str2 = new StringBuilder("ja").append("va").toString();
         System.out.println(str2.intern() == str2);
