@@ -1,4 +1,4 @@
-﻿package com.netpet.spools.book.springboot.chapter2.scope;
+package com.netpet.spools.book.springboot.chapter2.scope;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

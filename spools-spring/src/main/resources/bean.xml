@@ -19,7 +19,7 @@
 	
 	<!-- Proxy Instance with Certain Interface -->
 	<bean id="com.study.proxy.Subject"
-			class="com.study.proxy.RealSubject" singleton="false">
+		  class="com.netpet.spools.javacore.study.proxy.RealSubject" singleton="false">
 	</bean>
 	
 </beans>

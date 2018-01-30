@@ -1,4 +1,3 @@
-﻿
 package com.netpet.spools.book.javahighconcurrent.chapter5.future.jdk;
 
 import java.util.concurrent.ExecutionException;

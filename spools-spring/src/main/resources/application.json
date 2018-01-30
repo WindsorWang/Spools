@@ -1,0 +1,14 @@
+[
+  {
+    "name" : "robot",
+    "className" : "com.netpet.spools.spring.ioc.entity.Robot"
+  },
+  {
+    "name" : "hand",
+    "className" : "com.netpet.spools.spring.ioc.entity.Hand"
+  },
+  {
+    "name" : "mouth",
+    "className" : "com.netpet.spools.spring.ioc.entity.Mouth"
+  }
+]
