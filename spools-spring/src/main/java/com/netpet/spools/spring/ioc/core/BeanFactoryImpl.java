@@ -56,6 +56,11 @@ public class BeanFactoryImpl implements BeanFactory {
         return BeanUtils.instanceByCglib(clz, null, null);
     }
 
+    /**
+     * 给对应属性注入bean
+     * @param bean
+     * @throws Exception
+     */
     protected void populateBean(Object bean) throws Exception {
         Field[] fields = bean.getClass().getSuperclass().getDeclaredFields();
         if (fields != null && fields.length > 0) {

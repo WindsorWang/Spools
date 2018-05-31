@@ -16,7 +16,7 @@
 
 package com.netpet.spools.javacore.gc;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.PhantomReference;
