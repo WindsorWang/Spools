@@ -1,4 +1,3 @@
-
 package com.netpet.spools.book.javahighconcurrent.chapter5.future;
 
 /**
