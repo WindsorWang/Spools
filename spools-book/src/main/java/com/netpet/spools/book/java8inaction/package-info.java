@@ -1,6 +1,6 @@
 /**
- * @name Java 8实战
- * @ISBN 9787115419347
+ * @name Java 8 in action
+ * @ISBN 9781617291999
  *
  * Created by woncz on 2017/5/8.
  */

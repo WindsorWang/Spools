@@ -1,4 +1,3 @@
-﻿
 package com.netpet.spools.book.understandingthejvm.chapter3;
 
 /**
