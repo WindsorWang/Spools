@@ -11,8 +11,9 @@ import java.util.concurrent.FutureTask;
 public class FutureMain {
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
+        long startTime = System.currentTimeMillis();
         // 构建FutureTask
-        FutureTask<String> futureTask = new FutureTask<String>(new RealData("a"));
+        FutureTask<String> futureTask = new FutureTask<>(new RealData("a"));
         ExecutorService es = Executors.newFixedThreadPool(1);
         es.submit(futureTask);
 
@@ -21,9 +22,13 @@ public class FutureMain {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-
+            throw new RuntimeException(e);
         }
 
-        System.out.println("数据 : " + futureTask.get());
+        //System.out.println("一直等，" + "数据 : " + futureTask.get());
+        System.out.println("不等了");
+        long finishTime = System.currentTimeMillis();
+        System.out.println("cost time : " + (finishTime - startTime) / 1000 + "s");
+        es.shutdown();
     }
 }

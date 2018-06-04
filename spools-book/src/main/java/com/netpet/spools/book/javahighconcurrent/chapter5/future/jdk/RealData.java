@@ -14,16 +14,17 @@ public class RealData implements Callable<String> {
         this.param = param;
     }
     @Override
-    public String call() throws Exception {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < 10; i++) {
+    public String call() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 30; i++) {
             sb.append(param);
             try {
-                Thread.sleep(100);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
-
+                throw new RuntimeException(e);
             }
         }
+        System.out.println("finishing the future thread");
         return sb.toString();
     }
 }
